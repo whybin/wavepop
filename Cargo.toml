@@ -1,0 +1,8 @@
+[package]
+name = "wavepop"
+version = "0.1.0"
+authors = ["whybin <31753349+whybin@users.noreply.github.com>"]
+
+[dependencies]
+hound = "3.3.0"
+dft = "0.5.5"
