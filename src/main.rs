@@ -11,6 +11,8 @@ use rustfft::FFTplanner;
 use rustfft::num_complex::Complex;
 use rustfft::num_traits::Zero;
 
+use wavepop::chunker;
+
 fn fft_to_freq(bins: &Vec<Complex<f32>>, sample_rate: usize) -> usize {
     let up_to: usize = bins.len() / 2;    // Up to Nyquist frequency
     let magnitudes: Vec<f32> = bins[..up_to]
@@ -57,7 +59,7 @@ Vec<usize> {
     frequencies
 }
 
-fn analyze_file(filename: &str) {
+fn analyze_file(filename: &str) -> Vec<usize> {
     let mut reader = WavReader::open(filename).unwrap();
 
     let samples: Vec<f32> = reader.samples::<i32>()
@@ -67,8 +69,7 @@ fn analyze_file(filename: &str) {
     let sample_rate: usize = reader.spec().sample_rate as usize;
     let num_points: usize = 4096;
 
-    let approx: Vec<_> = get_frequencies(&samples, sample_rate, num_points);
-    println!("{:?}", approx);
+    get_frequencies(&samples, sample_rate, num_points)
 }
 
 fn main() {
@@ -79,5 +80,7 @@ fn main() {
     }
 
     let filename = &args[1];
-    analyze_file(filename);
+    let data: Vec<_> = analyze_file(filename);
+
+    chunker::chunk(&data);
 }
