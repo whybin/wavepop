@@ -1,28 +1,24 @@
 extern crate hound;
-extern crate dft;
+extern crate rustfft;
+
+extern crate wavepop;
 
 use std::env;
 use std::process;
 
 use hound::WavReader;
-use dft::{Operation, Plan, c32};
+use rustfft::FFTplanner;
+use rustfft::num_complex::Complex;
+use rustfft::num_traits::Zero;
 
-const SAMPLE_RATE: usize = 44100;
-
-#[derive(Debug)]
-struct Range(f32, f32);
-
-fn frequency_range(mut data: Vec<c32>, bins: usize) -> Range {
-    let plan = Plan::new(Operation::Forward, bins);
-    dft::transform(&mut data, &plan);
-
-    let up_to: usize = bins / 2;    // Up to Nyquist frequency
-    let magnitudes: Vec<f32> = data[..up_to]
+fn fft_to_freq(bins: &Vec<Complex<f32>>, sample_rate: usize) -> usize {
+    let up_to: usize = bins.len() / 2;    // Up to Nyquist frequency
+    let magnitudes: Vec<f32> = bins[..up_to]
         .iter()
-        .map(|&c32 { re, im }| (re.powi(2) + im.powi(2)).sqrt())
+        .map(|&Complex { re, im }| (re.powi(2) + im.powi(2)).sqrt())
         .collect();
 
-    let bin_size: f32 = SAMPLE_RATE as f32 / bins as f32;
+    let bin_size: usize = sample_rate / bins.len();
 
     let (mut freq_bin, mut freq_mag): (usize, f32) = (0, 0.0);
     for (i, &mag) in magnitudes.iter().enumerate() {
@@ -32,10 +28,33 @@ fn frequency_range(mut data: Vec<c32>, bins: usize) -> Range {
         }
     }
 
-    let lower_bound = freq_bin as f32 * bin_size;
-    let upper_bound = lower_bound + bin_size;
+    freq_bin * bin_size as usize
+}
 
-    Range(lower_bound, upper_bound)
+fn get_frequencies(samples: &Vec<f32>, sample_rate: usize, num_points: usize) ->
+Vec<usize> {
+    let samples_per: usize = sample_rate as usize / 2;
+    let num_freq: usize = samples.len() / samples_per;
+    let mut frequencies: Vec<usize> = vec![0; num_freq];
+
+    let mut planner = FFTplanner::new(false);
+    let fft = planner.plan_fft(num_points);
+
+    for i in 0..num_freq {
+        let offset = i * samples_per;
+        // Further slice the sample size by num_points
+        let mut input: Vec<Complex<f32>> = samples[offset..offset + num_points]
+            .iter()
+            .map(|&sample| Complex::new(sample as f32, 0.0))
+            .collect();
+
+        let mut output = vec![Complex::zero(); num_points];
+        fft.process(&mut input, &mut output);
+
+        frequencies[i] = fft_to_freq(&output, sample_rate);
+    }
+
+    frequencies
 }
 
 fn analyze_file(filename: &str) {
@@ -45,14 +64,11 @@ fn analyze_file(filename: &str) {
         .map(|sample| sample.unwrap() as f32)
         .collect();
 
-    const BIN_SIZE: usize = 2048;
-    let data: Vec<c32> = samples[..BIN_SIZE]
-        .iter()
-        .map(|sample| c32::new(*sample as f32, 0.0))
-        .collect();
+    let sample_rate: usize = reader.spec().sample_rate as usize;
+    let num_points: usize = 4096;
 
-    let freq_range = frequency_range(data, BIN_SIZE);
-    println!("{:?}", freq_range);
+    let approx: Vec<_> = get_frequencies(&samples, sample_rate, num_points);
+    println!("{:?}", approx);
 }
 
 fn main() {

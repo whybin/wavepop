@@ -1,13 +1,4 @@
 [[package]]
-name = "dft"
-version = "0.5.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-dependencies = [
- "num-complex 0.1.41 (registry+https://github.com/rust-lang/crates.io-index)",
- "num-traits 0.1.42 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
 name = "hound"
 version = "3.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -18,6 +9,7 @@ version = "0.1.41"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "num-traits 0.1.42 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rustc-serialize 0.3.24 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -26,15 +18,37 @@ version = "0.1.42"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
+name = "rustc-serialize"
+version = "0.3.24"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
+name = "rustfft"
+version = "2.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "num-complex 0.1.41 (registry+https://github.com/rust-lang/crates.io-index)",
+ "num-traits 0.1.42 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "suffix"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
 name = "wavepop"
 version = "0.1.0"
 dependencies = [
- "dft 0.5.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "hound 3.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rustfft 2.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "suffix 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [metadata]
-"checksum dft 0.5.5 (registry+https://github.com/rust-lang/crates.io-index)" = "86c83c6ce4ad5d596757571b99ae40694bbfd85453a9ca4862b13cc4cc290407"
 "checksum hound 3.3.0 (registry+https://github.com/rust-lang/crates.io-index)" = "2fce9b1b615fbfc7e0f91609d4d37cbad1df43cd6e2b25b0d09bb1f38eef1be9"
 "checksum num-complex 0.1.41 (registry+https://github.com/rust-lang/crates.io-index)" = "58de7b4bf7cf5dbecb635a5797d489864eadd03b107930cbccf9e0fd7428b47c"
 "checksum num-traits 0.1.42 (registry+https://github.com/rust-lang/crates.io-index)" = "9936036cc70fe4a8b2d338ab665900323290efb03983c86cbe235ae800ad8017"
+"checksum rustc-serialize 0.3.24 (registry+https://github.com/rust-lang/crates.io-index)" = "dcf128d1287d2ea9d80910b5f1120d0b8eede3fbf1abe91c40d39ea7d51e6fda"
+"checksum rustfft 2.0.0 (registry+https://github.com/rust-lang/crates.io-index)" = "7dc03728f9f3b5d4cacdaecee2ad9d3da56f8089b7f6b4edfac435afc90bcbec"
+"checksum suffix 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)" = "0470b43441e191806438afae7c017a9da03e3724ecc16f70b0d6201a4034f939"
