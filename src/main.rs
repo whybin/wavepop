@@ -83,7 +83,7 @@ fn main() {
     let filename = &args[1];
     let data: Vec<_> = analyze_file(filename);
 
-    chunker::chunk(&data);
+    let pattern_map = chunker::chunk(&data);
 
     let frequencies: Vec<u32> = data
         .iter()

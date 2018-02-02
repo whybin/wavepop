@@ -128,17 +128,12 @@ fn patternize(indices: &[u32], lcp: &[u32]) -> PatternMap {
     pattern_map
 }
 
-fn patternize_text(text: String) {
-    let table = SuffixTable::new(&text[..]);
-
-    patternize(&table.table(), &table.lcp_lens());
-}
-
-pub fn chunk(data: &Vec<usize>) {
+pub fn chunk(data: &Vec<usize>) -> PatternMap {
     let bytes: Vec<u8> = normalize(&data);
     let text = String::from_utf8(bytes).unwrap();
+    let table = SuffixTable::new(&text[..]);
 
-    patternize_text(text);
+    patternize(&table.table(), &table.lcp_lens())
 }
 
 #[cfg(test)]
