@@ -12,6 +12,7 @@ use rustfft::num_complex::Complex;
 use rustfft::num_traits::Zero;
 
 use wavepop::chunker;
+use wavepop::sound;
 
 fn fft_to_freq(bins: &Vec<Complex<f32>>, sample_rate: usize) -> usize {
     let up_to: usize = bins.len() / 2;    // Up to Nyquist frequency
@@ -83,4 +84,11 @@ fn main() {
     let data: Vec<_> = analyze_file(filename);
 
     chunker::chunk(&data);
+
+    let frequencies: Vec<u32> = data
+        .iter()
+        .map(|&freq| freq as u32)
+        .collect();
+    let sink = sound::compose(&frequencies, 500);
+    sound::play(&sink);
 }

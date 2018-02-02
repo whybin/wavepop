@@ -7,3 +7,4 @@ authors = ["whybin <31753349+whybin@users.noreply.github.com>"]
 hound = "3.3.0"
 rustfft = "2"
 suffix = "1"
+rodio = "0.5.2"
