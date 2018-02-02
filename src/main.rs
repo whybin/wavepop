@@ -12,6 +12,7 @@ use rustfft::num_complex::Complex;
 use rustfft::num_traits::Zero;
 
 use wavepop::chunker;
+use wavepop::svg;
 use wavepop::sound;
 
 fn fft_to_freq(bins: &Vec<Complex<f32>>, sample_rate: usize) -> usize {
@@ -84,6 +85,7 @@ fn main() {
     let data: Vec<_> = analyze_file(filename);
 
     let pattern_map = chunker::chunk(&data);
+    svg::to_svg(&pattern_map, 600, 600);
 
     let frequencies: Vec<u32> = data
         .iter()

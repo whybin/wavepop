@@ -211,6 +211,11 @@ version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
+name = "svg"
+version = "0.5.10"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
 name = "wavepop"
 version = "0.1.0"
 dependencies = [
@@ -218,6 +223,7 @@ dependencies = [
  "rodio 0.5.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "rustfft 2.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "suffix 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "svg 0.5.10 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -260,5 +266,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 "checksum rustc-serialize 0.3.24 (registry+https://github.com/rust-lang/crates.io-index)" = "dcf128d1287d2ea9d80910b5f1120d0b8eede3fbf1abe91c40d39ea7d51e6fda"
 "checksum rustfft 2.0.0 (registry+https://github.com/rust-lang/crates.io-index)" = "7dc03728f9f3b5d4cacdaecee2ad9d3da56f8089b7f6b4edfac435afc90bcbec"
 "checksum suffix 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)" = "0470b43441e191806438afae7c017a9da03e3724ecc16f70b0d6201a4034f939"
+"checksum svg 0.5.10 (registry+https://github.com/rust-lang/crates.io-index)" = "5ce4450d6982b758228fa5407db2fc27cefccb013c170ade23c03ec3a643bb72"
 "checksum winapi 0.2.8 (registry+https://github.com/rust-lang/crates.io-index)" = "167dc9d6949a9b857f3451275e911c3f44255842c1f7a76f33c55103a909087a"
 "checksum winapi-build 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)" = "2d315eee3b34aca4797b2da6b13ed88266e6d612562a0c46390af8299fc699bc"

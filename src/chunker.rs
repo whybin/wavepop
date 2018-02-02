@@ -44,6 +44,14 @@ impl PatternMap {
         &self.order[index]
     }
 
+    pub fn num_patterns(&self) -> usize {
+        self.patterns.len()
+    }
+
+    pub fn num_indices(&self) -> usize {
+        self.order.len()
+    }
+
     /// Append pattern length and retrieve index
     fn new_pattern(&mut self, length: u32) -> u32 {
         self.patterns.push(length);
