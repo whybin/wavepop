@@ -2,6 +2,10 @@ use gfx_device_gl::Resources;
 use piston_window::*;
 use image;
 
+pub trait WindowFrame {
+    fn handle_event(&mut self) -> bool;
+}
+
 pub fn new_window(width: u32, height: u32) -> PistonWindow {
     let window = WindowSettings::new("", [width, height])
         .exit_on_esc(true)
