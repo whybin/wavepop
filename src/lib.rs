@@ -6,6 +6,7 @@ extern crate gfx_device_gl;
 extern crate piston_window;
 extern crate svg as rustsvg;
 extern crate image;
+extern crate rand;
 
 pub mod frequency;
 pub mod chunker;

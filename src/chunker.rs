@@ -1,4 +1,17 @@
+use std::ops::Range;
+
+use rand::{thread_rng, Rng};
 use suffix::SuffixTable;
+
+fn random_color(range: Range<u8>) -> String {
+    let mut colors = vec![0; 3];
+
+    for i in 0..colors.len() {
+        colors[i] = thread_rng().gen_range::<u8>(range.start, range.end);
+    }
+
+    format!("rgb({}, {}, {})", colors[0], colors[1], colors[2])
+}
 
 fn normalize(data: &Vec<usize>) -> Vec<u8> {
     let mut unique: Vec<usize> = Vec::new();
@@ -21,9 +34,13 @@ fn normalize(data: &Vec<usize>) -> Vec<u8> {
     ret
 }
 
+pub struct Pattern {
+    pub length: u32,
+    pub color: String
+}
+
 pub struct PatternMap {
-    /// Array of lengths
-    patterns: Vec<u32>,
+    patterns: Vec<Pattern>,
     /// For each index, an array of pattern indices
     order: Vec<Vec<u32>>
 }
@@ -36,11 +53,11 @@ impl PatternMap {
         }
     }
 
-    pub fn pattern_length_at(&self, index: u32) -> u32 {
-        self.patterns[index as usize]
+    pub fn pattern_at(&self, index: u32) -> &Pattern {
+        &self.patterns[index as usize]
     }
 
-    pub fn patterns_at(&self, index: usize) -> &Vec<u32> {
+    pub fn pattern_indices(&self, index: usize) -> &Vec<u32> {
         &self.order[index]
     }
 
@@ -54,7 +71,9 @@ impl PatternMap {
 
     /// Append pattern length and retrieve index
     fn new_pattern(&mut self, length: u32) -> u32 {
-        self.patterns.push(length);
+        let color = random_color(32..225);
+        let pattern = Pattern { length, color };
+        self.patterns.push(pattern);
 
         self.patterns.len() as u32 - 1
     }
