@@ -1,4 +1,5 @@
 extern crate piston_window;
+extern crate graphics;
 extern crate wavepop;
 
 use std::env;
@@ -26,7 +27,8 @@ fn handle_file(filename: &str) {
 
     while let Some(event) = window.next() {
         window.draw_2d(&event, |ctx, gl| {
-            clear(color::BLACK, gl);
+            graphics::clear(color::BLACK, gl);
+            graphics::image(&texture, ctx.transform, gl);
         });
     }
     return;
