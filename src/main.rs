@@ -20,7 +20,7 @@ const HOR_SPACING: usize = 18;
 const BPS: usize = 2;
 
 fn handle_file(filename: &str) {
-    let data: Vec<_> = frequency::analyze_file(filename, NUM_SECONDS);
+    let data: Vec<_> = frequency::analyze_file(filename, NUM_SECONDS, BPS);
 
     let pattern_map = chunker::chunk(&data);
     let image = svg::to_svg_image(&pattern_map, HOR_SPACING, WIN_HEIGHT);

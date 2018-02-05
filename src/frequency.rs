@@ -23,9 +23,10 @@ fn fft_to_freq(bins: &Vec<Complex<f32>>, sample_rate: usize) -> usize {
     freq_bin * bin_size as usize
 }
 
-fn get_frequencies(samples: &Vec<f32>, sample_rate: usize, num_points: usize) ->
-Vec<usize> {
-    let samples_per: usize = sample_rate as usize / 2;
+fn get_frequencies(
+    samples: &Vec<f32>, sample_rate: usize, num_points: usize, bps: usize
+    ) -> Vec<usize> {
+    let samples_per: usize = sample_rate as usize / bps;
     let num_freq: usize = samples.len() / samples_per;
     let mut frequencies: Vec<usize> = vec![0; num_freq];
 
@@ -49,7 +50,7 @@ Vec<usize> {
     frequencies
 }
 
-pub fn analyze_file(filename: &str, num_seconds: usize) -> Vec<usize> {
+pub fn analyze_file(filename: &str, num_seconds: usize, bps: usize) -> Vec<usize> {
     let mut reader = WavReader::open(filename).unwrap();
     let sample_rate: usize = reader.spec().sample_rate as usize;
 
@@ -60,7 +61,7 @@ pub fn analyze_file(filename: &str, num_seconds: usize) -> Vec<usize> {
 
     let num_points: usize = 4096;
 
-    let mut frequencies = get_frequencies(&samples, sample_rate, num_points);
+    let mut frequencies = get_frequencies(&samples, sample_rate, num_points, bps);
     frequencies.retain(|&freq| freq < 20000);
 
     frequencies
