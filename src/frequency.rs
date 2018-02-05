@@ -59,5 +59,8 @@ pub fn analyze_file(filename: &str) -> Vec<usize> {
     let sample_rate: usize = reader.spec().sample_rate as usize;
     let num_points: usize = 4096;
 
-    get_frequencies(&samples, sample_rate, num_points)
+    let mut frequencies = get_frequencies(&samples, sample_rate, num_points);
+    frequencies.retain(|&freq| freq < 20000);
+
+    frequencies
 }
