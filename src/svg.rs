@@ -1,12 +1,16 @@
+extern crate nsvg;
+
 use std::cmp::max;
 
 use rustsvg::node::element::path::Data;
 use rustsvg::node::element::Path;
 use rustsvg::{Document, save};
+use image;
 
 use chunker::PatternMap;
 
-pub fn to_svg(pattern_map: &PatternMap, width: usize, height: usize) {
+pub fn to_svg_image(pattern_map: &PatternMap, width: usize, height: usize)
+    -> image::RgbaImage {
     let hor_spacing = max(1, width / pattern_map.num_indices());
     let ver_spacing = max(1, height / pattern_map.num_patterns());
     const HOR_UNITS: u32 = 6;
@@ -32,5 +36,12 @@ pub fn to_svg(pattern_map: &PatternMap, width: usize, height: usize) {
         }
     }
 
-    save("assets/images/output.svg", &doc).unwrap();
+    let filepath = "assets/images/output.svg";
+    save(filepath, &doc).unwrap();
+
+    // Convert to PNG
+    let svg = nsvg::parse_file(filepath, "px", 100.0);
+    let image = nsvg::rasterize(svg, 1.0);
+
+    image
 }
