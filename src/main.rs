@@ -13,13 +13,14 @@ use wavepop::svg;
 use wavepop::display;
 use wavepop::sound;
 
+const NUM_SECONDS: usize = 90;
 const WIN_WIDTH: usize = 800;
 const WIN_HEIGHT: usize = 800;
 const HOR_SPACING: usize = 18;
 const BPS: usize = 2;
 
 fn handle_file(filename: &str) {
-    let data: Vec<_> = frequency::analyze_file(filename);
+    let data: Vec<_> = frequency::analyze_file(filename, NUM_SECONDS);
 
     let pattern_map = chunker::chunk(&data);
     let image = svg::to_svg_image(&pattern_map, HOR_SPACING, WIN_HEIGHT);

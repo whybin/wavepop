@@ -49,14 +49,15 @@ Vec<usize> {
     frequencies
 }
 
-pub fn analyze_file(filename: &str) -> Vec<usize> {
+pub fn analyze_file(filename: &str, num_seconds: usize) -> Vec<usize> {
     let mut reader = WavReader::open(filename).unwrap();
+    let sample_rate: usize = reader.spec().sample_rate as usize;
 
     let samples: Vec<f32> = reader.samples::<i32>()
+        .take(num_seconds * sample_rate)
         .map(|sample| sample.unwrap() as f32)
         .collect();
 
-    let sample_rate: usize = reader.spec().sample_rate as usize;
     let num_points: usize = 4096;
 
     let mut frequencies = get_frequencies(&samples, sample_rate, num_points);
