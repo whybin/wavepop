@@ -16,8 +16,8 @@ use wavepop::sound;
 const WIN_WIDTH: usize = 800;
 const WIN_HEIGHT: usize = 800;
 const HOR_SPACING: usize = 18;
+const BPS: usize = 2;
 
-#[allow(unreachable_code)]
 fn handle_file(filename: &str) {
     let data: Vec<_> = frequency::analyze_file(filename);
 
@@ -27,20 +27,31 @@ fn handle_file(filename: &str) {
     let mut window = display::new_window(WIN_WIDTH as u32, WIN_HEIGHT as u32);
     let texture = display::new_texture(&mut window, &image);
 
-    while let Some(event) = window.next() {
-        window.draw_2d(&event, |ctx, gl| {
-            graphics::clear(color::grey(0.1), gl);
-            graphics::image(&texture, ctx.transform, gl);
-        });
-    }
-    return;
-
+    // Start sound
     let frequencies: Vec<u32> = data
         .iter()
         .map(|&freq| freq as u32)
         .collect();
-    let sink = sound::compose(&frequencies, 500);
-    sound::play(&sink);
+    // Must keep variable around
+    let _sink = sound::compose(&frequencies, 1000 / BPS as u64);
+
+    let mut offset = 0.0;
+
+    // Start processing window events
+    while let Some(event) = window.next() {
+        window.draw_2d(&event, |ctx, gl| {
+            graphics::clear(color::grey(0.1), gl);
+
+            let transform = ctx.transform
+                .trans(offset, 0.0);
+
+            graphics::image(&texture, transform, gl);
+        });
+
+        if let Some(args) = event.update_args() {
+            offset -= args.dt * (HOR_SPACING * BPS) as f64;
+        }
+    }
 }
 
 fn main() {
