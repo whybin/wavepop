@@ -13,21 +13,23 @@ use wavepop::svg;
 use wavepop::display;
 use wavepop::sound;
 
+const WIN_WIDTH: usize = 800;
+const WIN_HEIGHT: usize = 800;
+const HOR_SPACING: usize = 18;
+
 #[allow(unreachable_code)]
 fn handle_file(filename: &str) {
     let data: Vec<_> = frequency::analyze_file(filename);
 
     let pattern_map = chunker::chunk(&data);
-    let width = 800;
-    let height = 800;
-    let image = svg::to_svg_image(&pattern_map, width, height);
+    let image = svg::to_svg_image(&pattern_map, HOR_SPACING, WIN_HEIGHT);
 
-    let mut window = display::new_window(width as u32, height as u32);
+    let mut window = display::new_window(WIN_WIDTH as u32, WIN_HEIGHT as u32);
     let texture = display::new_texture(&mut window, &image);
 
     while let Some(event) = window.next() {
         window.draw_2d(&event, |ctx, gl| {
-            graphics::clear(color::BLACK, gl);
+            graphics::clear(color::grey(0.1), gl);
             graphics::image(&texture, ctx.transform, gl);
         });
     }

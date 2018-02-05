@@ -9,13 +9,11 @@ use image;
 
 use chunker::PatternMap;
 
-pub fn to_svg_image(pattern_map: &PatternMap, width: usize, height: usize)
-    -> image::RgbaImage {
+pub fn to_svg_image(
+    pattern_map: &PatternMap, hor_spacing: usize, height: usize
+    ) -> image::RgbaImage {
     let ver_spacing = max(1, height / pattern_map.num_patterns());
-    let hor_spacing = 12;
-    
-    let mut doc = Document::new()
-        .set("viewbox", (0, 0, width, height));
+    let mut doc = Document::new();
 
     // Iterate over patterns in order
     for i in 0..pattern_map.num_indices() {
