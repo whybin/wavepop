@@ -36,7 +36,7 @@ fn normalize(data: &Vec<usize>) -> Vec<u8> {
 
 pub struct Pattern {
     pub length: u32,
-    pub color: String
+    pub colors: (String, String)
 }
 
 pub struct PatternMap {
@@ -71,8 +71,8 @@ impl PatternMap {
 
     /// Append pattern length and retrieve index
     fn new_pattern(&mut self, length: u32) -> u32 {
-        let color = random_color(32..225);
-        let pattern = Pattern { length, color };
+        let colors = (random_color(32..225), random_color(32..225));
+        let pattern = Pattern { length, colors };
         self.patterns.push(pattern);
 
         self.patterns.len() as u32 - 1
