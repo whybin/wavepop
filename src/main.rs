@@ -84,7 +84,7 @@ fn handle_file(filename: &str) {
     visual_slice.set_position([X_OFFSET, 50]);
 
     let mut visual_frame = VisualFrame::new(
-        WIN_WIDTH, WIN_HEIGHT, &image, (2 * HOR_SPACING) as f64, 0.9
+        WIN_WIDTH, WIN_HEIGHT, &image, -2.0 * HOR_SPACING as f64, 0.9
         );
     visual_frame.set_position([X_OFFSET + 2 * HOR_SPACING as i32, 50]);
 
