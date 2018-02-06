@@ -26,26 +26,33 @@ const BPS: usize = 2;
 struct VisualFrame {
     window: PistonWindow,
     texture: Texture<Resources>,
-    offset: f64
+    offset: f64,
+    grey_ratio: f32
 }
 
 impl VisualFrame {
-    fn new(width: usize, height: usize, image: &image::RgbaImage)
-        -> VisualFrame {
+    fn new(
+        width: usize, height: usize, image: &image::RgbaImage, offset: f64,
+        grey_ratio: f32
+        ) -> VisualFrame {
         let mut window = new_window(width as u32, height as u32);
         let texture = new_texture(&mut window, &image);
 
-        VisualFrame { window, texture, offset: 0.0 }
+        VisualFrame { window, texture, offset, grey_ratio }
+    }
+
+    fn set_position(&mut self, pos: [i32; 2]) {
+        self.window.set_position(pos);
     }
 }
 
 impl WindowFrame for VisualFrame {
     fn handle_event(&mut self) -> bool {
         if let Some(event) = self.window.next() {
-            let &mut VisualFrame { offset, ref texture, .. } = self;
+            let &mut VisualFrame { offset, ref texture, grey_ratio, .. } = self;
 
             self.window.draw_2d(&event, |ctx, gl| {
-                graphics::clear(color::grey(0.1), gl);
+                graphics::clear(color::grey(grey_ratio), gl);
 
                 let transform = ctx.transform
                     .trans(offset, 0.0);
@@ -70,7 +77,16 @@ fn handle_file(filename: &str) {
     let pattern_map = chunker::chunk(&data);
     let image = svg::to_svg_image(&pattern_map, HOR_SPACING, WIN_HEIGHT);
 
-    let mut visual_frame = VisualFrame::new(WIN_WIDTH, WIN_HEIGHT, &image);
+    const X_OFFSET: i32 = 300;
+
+    let mut visual_slice =
+        VisualFrame::new(HOR_SPACING, WIN_HEIGHT, &image, 0.0, 0.1);
+    visual_slice.set_position([X_OFFSET, 50]);
+
+    let mut visual_frame = VisualFrame::new(
+        WIN_WIDTH, WIN_HEIGHT, &image, (2 * HOR_SPACING) as f64, 0.9
+        );
+    visual_frame.set_position([X_OFFSET + 2 * HOR_SPACING as i32, 50]);
 
     // Start sound
     let frequencies: Vec<u32> = data
@@ -81,7 +97,7 @@ fn handle_file(filename: &str) {
     let _sink = sound::compose(&frequencies, 1000 / BPS as u64);
 
     // Start processing window events
-    while visual_frame.handle_event() { }
+    while visual_slice.handle_event() && visual_frame.handle_event() { }
 }
 
 fn main() {
